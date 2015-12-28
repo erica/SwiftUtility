@@ -9,9 +9,8 @@ Basic Errors
 private func trimString(string: String, toBoundary boundary: Character) -> String {
     if string.isEmpty {return ""}
     var limitIndex = string.endIndex.predecessor()
-    let characterStore = string.characters
     while limitIndex >= string.startIndex {
-        if characterStore[limitIndex] == boundary {
+        if string.characters[limitIndex] == boundary {
             return string[limitIndex.successor()..<string.endIndex]
         }
         if limitIndex == string.startIndex {break}
