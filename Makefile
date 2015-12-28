@@ -13,6 +13,9 @@ setup:
 	git push -u origin master
 	git push --tags
 
+doit:
+	git add . ; git commit -m "tweaked" ; git push
+
 pull: 
 	git clone https://github.com/erica/SwiftString.git
 
