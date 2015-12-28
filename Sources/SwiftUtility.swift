@@ -42,3 +42,21 @@ func =?<T>(inout target: T, newValue: T?) {
         target = unwrapped
     }
 }
+
+// --------------------------------------------------
+// MARK: Chaining
+// --------------------------------------------------
+
+infix operator >>> { associativity left }
+
+/// Failable chaining
+public func >>><T, U>(x: T?, f: T -> U?) -> U? {
+    if let x = x {return f(x)}
+    return .None
+}
+
+/// Direct chaining
+public func >>><T, U>(x: T, f: T -> U) -> U {
+    return f(x)
+}
+
