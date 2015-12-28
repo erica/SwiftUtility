@@ -27,3 +27,18 @@ public postfix func *** <T>(item: T) -> T {
     print(item)
     return item
 }
+
+
+//--------------------------------------------------------------
+// MARK: Conditional Assignment
+//--------------------------------------------------------------
+
+infix operator =? {}
+
+/// Conditionally assign optional value to target via unwrapping
+/// Thanks, Mike Ash
+func =?<T>(inout target: T, newValue: T?) {
+    if let unwrapped = newValue {
+        target = unwrapped
+    }
+}
