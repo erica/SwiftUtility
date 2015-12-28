@@ -1,4 +1,5 @@
-## Less a MakeFile. More a Cheat Sheet.
+# Less a MakeFile. More a Cheat Sheet.
+# git config —global push.followTags true 
 
 MESSAGE=$(filter-out $@,$(MAKECMDGOALS))
 
@@ -31,9 +32,7 @@ cleaner:
 	rm -rf .git
 
 clean:
-	rm *~ Sources/*~
-	rm .DS_Store
-	rm */.DS_Store
+	rm *~ Sources/*~ .DS_Store */.DS_Store
 
 show:
 	git tag
