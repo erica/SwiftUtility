@@ -60,3 +60,34 @@ public func >>><T, U>(x: T, f: T -> U) -> U {
     return f(x)
 }
 
+//--------------------------------------------------------------
+// MARK: Extended Initialization / Chaining
+//--------------------------------------------------------------
+
+infix operator •-> {}
+
+/// Prepare instance
+func •-> <T>(object: T, @noescape f: (inout T) -> Void) -> T {
+    var newValue = object
+    f(&newValue)
+    return newValue
+}
+
+/*
+Usage note:
+
+Class:
+class MyClass {var (x, y, z) = ("x", "y", "z")}
+let myInstance = MyClass() •-> {
+    $0.x = "NewX"
+    $0.y = "NewY"
+}
+
+
+Struct:
+let myFoo = Foo() •-> {
+    (inout item: Foo) in
+    item.b = 23
+}
+
+*/
