@@ -7,13 +7,13 @@ Basic Errors
 
 /// Workaround to avoid using Foundation for lastPathComponent
 private func trimString(string: String, toBoundary boundary: Character) -> String {
-    if string.isEmpty {return ""}
+    if string.isEmpty { return "" }
     var limitIndex = string.endIndex.predecessor()
     while limitIndex >= string.startIndex {
         if string.characters[limitIndex] == boundary {
             return string[limitIndex.successor()..<string.endIndex]
         }
-        if limitIndex == string.startIndex {break}
+        if limitIndex == string.startIndex { break }
         limitIndex = limitIndex.predecessor()
     }
     return string
@@ -24,7 +24,7 @@ private func trimString(string: String, toBoundary boundary: Character) -> Strin
 /// has occurred
 public struct CoreError: ErrorType {
     
-    let (reason, context) : (String, String)
+    let (reason, context): (String, String)
     
     public init(
         _ reason: String,
@@ -52,7 +52,7 @@ public extension Contextualizable {
         ) -> CoreError
     {
         
-        let reasons = items.map({"\($0)"}).joinWithSeparator(", ")
+        let reasons = items.map({ "\($0)" }).joinWithSeparator(", ")
         let context = "\(function):\(self.dynamicType):\(file):\(line) "
         
         return CoreError(reasons, context)
@@ -71,7 +71,7 @@ public func ContextError(
     line: Int = __LINE__
     ) -> CoreError
 {
-    let reasons = items.map({"\($0)"}).joinWithSeparator(", ")
+    let reasons = items.map({ "\($0)" }).joinWithSeparator(", ")
     let context = "\(file):\(line) "
     return CoreError(reasons, context)
 }

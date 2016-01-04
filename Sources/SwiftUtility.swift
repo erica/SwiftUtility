@@ -12,7 +12,7 @@ infix operator --> {}
 
 /// The ashcast: a better cast. Thanks Mike Ash
 func --><T, U>(value: T, target: U.Type) -> U? {
-    guard sizeof(T.self) == sizeof(U.self) else {return nil}
+    guard sizeof(T.self) == sizeof(U.self) else { return nil }
     return unsafeBitCast(value, target)
 }
 
@@ -24,8 +24,7 @@ postfix operator *** {}
 
 /// Postfix printing for quick playground tests
 public postfix func *** <T>(item: T) -> T {
-    print(item)
-    return item
+    print(item); return item
 }
 
 
@@ -38,9 +37,7 @@ infix operator =? {}
 /// Conditionally assign optional value to target via unwrapping
 /// Thanks, Mike Ash
 func =?<T>(inout target: T, newValue: T?) {
-    if let unwrapped = newValue {
-        target = unwrapped
-    }
+    if let unwrapped = newValue { target = unwrapped }
 }
 
 // --------------------------------------------------
@@ -51,8 +48,8 @@ infix operator >>> { associativity left }
 
 /// Failable chaining
 public func >>><T, U>(x: T?, f: T -> U?) -> U? {
-    if let x = x {return f(x)}
-    return .None
+    if let x = x { return f(x) }
+    return nil
 }
 
 /// Direct chaining
