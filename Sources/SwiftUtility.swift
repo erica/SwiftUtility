@@ -40,6 +40,19 @@ func =?<T>(inout target: T, newValue: T?) {
     if let unwrapped = newValue { target = unwrapped }
 }
 
+
+//--------------------------------------------------------------
+// MARK: In-Place Value Assignment
+//--------------------------------------------------------------
+
+infix operator <- {}
+
+/// Replace the value of `a` with `b` and return the old value.
+/// The EridiusAssignment courtesy of Kevin Ballard
+public func <- <T>(inout a: T, b: T) -> T {
+    var value = b; swap(&a, &value); return value
+}
+
 // --------------------------------------------------
 // MARK: Chaining
 // --------------------------------------------------
