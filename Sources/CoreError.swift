@@ -90,6 +90,7 @@ public func ContextError(
 ///     withIntermediateDirectories: true,
 ///     attributes: nil)
 /// }
+/// ```
 ///
 public func attempt<T>(
     line line: Int = __LINE__,
