@@ -71,6 +71,25 @@ public func >>><T, U>(x: T, f: T -> U) -> U {
 }
 
 //--------------------------------------------------------------
+// MARK: Floating point equality (David Sweeris)
+//--------------------------------------------------------------
+
+// All courtesy of David Sweeris from
+// Swift-Evolution mailing list
+
+infix operator ≈ {precedence 255}
+func ≈ (value: Double, tolerance: Double) -> (value: Double, tolerance: Double) {
+    return (value: value, tolerance: tolerance)
+}
+func == (lhs: Double, rhs: (value: Double, tolerance: Double)) -> Bool {
+    return ((rhs.value - rhs.tolerance)...(rhs.value + rhs.tolerance)) ~= lhs
+}
+
+// e.g. 3.0 == 3.01 ≈ 0.001 // false
+// e.g. 3.0 == 3.01 ≈ 0.01 // true
+
+
+//--------------------------------------------------------------
 // MARK: Extended Initialization / Chaining
 //--------------------------------------------------------------
 

@@ -1,25 +1,30 @@
 /*
 
-Erica Sadun, http://ericasadun.com
-Basic Errors
+    Erica Sadun, http://ericasadun.com
+    Basic Errors
 
 */
 
-/// Workaround to avoid using Foundation for lastPathComponent
-private func trimString(string: String, toBoundary boundary: Character) -> String {
-    if string.isEmpty { return "" }
-    var limitIndex = string.endIndex.predecessor()
-    while limitIndex >= string.startIndex {
-        if string.characters[limitIndex] == boundary {
-            return string[limitIndex.successor()..<string.endIndex]
-        }
-        if limitIndex == string.startIndex { break }
-        limitIndex = limitIndex.predecessor()
-    }
-    return string
-}
+import Foundation
 
-/// A basic utility error type that stores the reason for
+/*
+
+    This code continues to use old-style context identifiers.
+    This is easily migrated.
+
+    __FILE__ -> #file String
+    __LINE__ -> #line Int
+    __COLUMN__ -> #column Int
+    __FUNCTION__ -> #function String (should be Selector?)
+
+    See: https://github.com/apple/swift-evolution/blob/master/proposals/0028-modernizing-debug-identifiers.md
+
+    Requesting #fileName to specify the last path
+    component for what is currently #file
+
+*/
+
+/// A basic utility error type. It stores a reason for
 /// a failed operation and the context under which the error
 /// has occurred
 public struct CoreError: ErrorType {
@@ -28,59 +33,85 @@ public struct CoreError: ErrorType {
     
     public init(
         _ reason: String,
-        _ context: String = __FILE__)
+        _ context: String = "",
+        fileName: String = __FILE__,
+        lineNumber: Int = __LINE__
+        )
     {
+        /// Establishes a context if one is not supplied by the caller
+        let derivedContext = context.isEmpty
+            ? (fileName as NSString).lastPathComponent + ":\(lineNumber)"
+            : context
         
-        (self.reason, self.context) = (reason, context)
+        // Initialize with supplied reason and derived or supplied context
+        (self.reason, self.context) = (reason, derivedContext)
     }
 }
 
-/// By adopting Contextualizable, constructs can build errors
+/// On adopting Contextualizable, constructs can build errors
 /// specific to their calling conditions
 public protocol Contextualizable {}
 
-/// Adding default implementation for error building
+// Introduces a default implementation to support context-dependent
+// error building
 public extension Contextualizable {
     
     /// Creates a context error at the point of failure, picking
     /// up the file, function, and line of the error event
     public func BuildContextError(
         items: Any...,
-        file: String = trimString(__FILE__, toBoundary: "/"),
+        fileName: String = __FILE__,
         function: String = __FUNCTION__,
         line: Int = __LINE__
         ) -> CoreError
     {
-        
+        /// Caller supplies one or more instances
+        /// as "reasons", which need not be strings. Their default
+        /// representation will be added to the 'reasons' list.
         let reasons = items.map({ "\($0)" }).joinWithSeparator(", ")
-        let context = "\(function):\(self.dynamicType):\(file):\(line) "
         
+        /// Trimmed file name, derived from calling context
+        let coreFileName = (fileName as NSString).lastPathComponent
+        
+        /// Calling context composed of function, type, file name, line
+        let context = "\(function):\(self.dynamicType):\(coreFileName):\(line) "
+        
+        // Produce and return a core error
         return CoreError(reasons, context)
     }
 }
 
-/// A lighter weight alternative to Contextualizable that still
+/// A lighter weight alternative to Contextualizable that also
 /// picks up file and line context for error handling
 ///
-/// - param items: Caller can supply zero or more instances as "reasons", which
-///   need not be strings. Their default representation will be added
-///   to the 'reasons' list.
+/// - parameter items: Caller supplies one or more instances
+///   as "reasons", which need not be strings. Their default
+///   representation will be added to the 'reasons' list.
 public func ContextError(
     items: Any...,
-    file: String = trimString(__FILE__, toBoundary: "/"),
-    line: Int = __LINE__
+    fileName: String = (__FILE__ as NSString).lastPathComponent,
+    lineNumber: Int = __LINE__
     ) -> CoreError
 {
+    /// Munges supplied items into a single compound "reason"
+    /// describing the reasons the error took place
     let reasons = items.map({ "\($0)" }).joinWithSeparator(", ")
-    let context = "\(file):\(line) "
+    
+    /// Establish the context
+    let context = "\(fileName):\(lineNumber) "
+    
+    // Produce and return a core error
     return CoreError(reasons, context)
 }
 
-/// Replacement for `try?` that introduces printing for
-/// error conditions instead of discarding those errors
+/// Replacement for `try?` that introduces an error handler
+/// The default handler prints an error before returning nil
 ///
-/// - Parameter shouldCrash: defaults to false. When set to true
+/// - Parameter file: source file, derived from `__FILE__` context literal
+/// - Parameter line: source line, derived from `__LINE__` context literal
+/// - Parameter crashOnError: defaults to false. When set to true
 ///   will raise a fatal error, emulating try! instead of try?
+/// - Parameter errorHandler: processes the error, returns nil
 ///
 /// ```swift
 /// attempt {
@@ -93,42 +124,53 @@ public func ContextError(
 /// ```
 ///
 public func attempt<T>(
-    line line: Int = __LINE__,
-    shouldCrash: Bool = false,
-    closure: () throws -> T
-    ) -> T?
-{
-    do {
+    file fileName: String = __FILE__,
+    line lineNumber: Int = __LINE__,
+    crashOnError: Bool = false,
+    errorHandler: (String, Int, ErrorType) -> Void = {
+        // Default handler prints context:error and returns nil
+        fileName, lineNumber, error in
         
-        /// Return executes only if closure succeeds
-        return try closure()
-        
-    } catch {
-        
-        /// Emulate try! by crashing
-        if shouldCrash {
-            print("Fatal error on line \(line): \(error)")
-            fatalError()
-        }
+        /// Retrieve last path component because #fileName is
+        /// not yet a thing in Swift
+        let trimmedFileName: String = (fileName as NSString).lastPathComponent
         
         /// Force print and return nil like try?
-        print("Error \(line): \(error)")
-        return nil
-    }
+        print("Error \(trimmedFileName):\(lineNumber) \(error)")
+    },
+    closure: () throws -> T) -> T? {
+        
+        do {
+            // Return executes only if closure succeeds, returning T
+            return try closure()
+            
+        } catch {
+            // Emulate try! by crashing
+            if crashOnError {
+                print("Fatal error \(fileName):\(lineNumber): \(error)")
+                fatalError()
+            }
+            
+            // Execute error handler and return nil
+            errorHandler(fileName, lineNumber, error)
+            return nil
+        }
 }
 
 /// Alternative to attempt that ignores any results and returns
 /// a Boolean value indicating success
 public func testAttempt<T>(
-    line line: Int = __LINE__,
-    shouldCrash: Bool = false,
+    file fileName: String = __FILE__,
+    line lineNumber: Int = __LINE__,
+    crashOnError: Bool = false,
     closure: () throws -> T
     ) -> Bool
 {
     /// Throw away result but check for non-nil. Thanks nuclearace
     return attempt(
-        line: line,
-        shouldCrash: shouldCrash,
+        file: fileName,
+        line: lineNumber,
+        crashOnError: crashOnError,
         closure: closure
         ) == nil ? false : true
 }
