@@ -89,7 +89,7 @@ public extension Contextualizable {
 ///   representation will be added to the 'reasons' list.
 public func ContextError(
     items: Any...,
-    fileName: String = (__FILE__ as NSString).lastPathComponent,
+    fileName: String = __FILE__,
     lineNumber: Int = __LINE__
     ) -> CoreError
 {
@@ -97,8 +97,11 @@ public func ContextError(
     /// describing the reasons the error took place
     let reasons = items.map({ "\($0)" }).joinWithSeparator(", ")
     
+    /// Trimmed file name, derived from calling context
+    let coreFileName = (fileName as NSString).lastPathComponent
+    
     /// Establish the context
-    let context = "\(fileName):\(lineNumber) "
+    let context = "\(coreFileName):\(lineNumber) "
     
     // Produce and return a core error
     return CoreError(reasons, context)
