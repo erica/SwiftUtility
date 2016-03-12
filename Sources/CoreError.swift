@@ -107,6 +107,8 @@ public func ContextError(
     return CoreError(reasons, context)
 }
 
+public typealias CommonErrorHandlerType = (String, Int, ErrorType) -> Void
+
 /// Replacement for `try?` that introduces an error handler
 /// The default handler prints an error before returning nil
 ///
@@ -130,7 +132,7 @@ public func attempt<T>(
     file fileName: String = __FILE__,
     line lineNumber: Int = __LINE__,
     crashOnError: Bool = false,
-    errorHandler: (String, Int, ErrorType) -> Void = {
+    errorHandler: CommonErrorHandlerType = {
         // Default handler prints context:error and returns nil
         fileName, lineNumber, error in
         
