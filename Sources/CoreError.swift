@@ -107,6 +107,7 @@ public func ContextError(
     return CoreError(reasons, context)
 }
 
+/// consists of filename, line number, error tuple
 public typealias CommonErrorHandlerType = (String, Int, ErrorType) -> Void
 
 /// Replacement for `try?` that introduces an error handler
@@ -119,12 +120,31 @@ public typealias CommonErrorHandlerType = (String, Int, ErrorType) -> Void
 /// - Parameter errorHandler: processes the error, returns nil
 ///
 /// ```swift
+/// // Void example, will fail
 /// attempt {
 ///   let mgr = NSFileManager.defaultManager()
 ///   try mgr.createDirectoryAtPath(
 ///     "/Users/notarealuser",
 ///     withIntermediateDirectories: true,
 ///     attributes: nil)
+/// }
+///
+/// // Return example, will fail
+/// let x = attempt {
+///     _ -> [NSURL] in
+///     let url = NSURL(fileURLWithPath: "/Not/Real")
+///     return try NSFileManager
+///         .defaultManager()
+///         .contentsOfDirectoryAtURL(url, includingPropertiesForKeys: nil, options: [])
+/// }
+///
+/// /// Return example, will succeed
+/// let y = attempt {
+///     _ -> [NSURL] in
+///     let url = NSBundle.mainBundle().bundleURL
+///     return try NSFileManager
+///         .defaultManager()
+///         .contentsOfDirectoryAtURL(url, includingPropertiesForKeys: nil, options: [])
 /// }
 /// ```
 ///
