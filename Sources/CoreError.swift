@@ -160,7 +160,7 @@ public func attempt<T>(
     line lineNumber: Int = __LINE__,
     crashOnError: Bool = false,
     errorHandler: CommonErrorHandlerType = defaultCommonErrorHandler,
-    closure: () throws -> T) -> T? {
+    @noescape closure: () throws -> T) -> T? {
         
         do {
             // Return executes only if closure succeeds, returning T
