@@ -112,8 +112,8 @@ public typealias CommonErrorHandlerType = (String, Int, ErrorType) -> Void
 
 /// Default error handler prints context and error
 public let defaultCommonErrorHandler: CommonErrorHandlerType = {
-    fileName, lineNumber, error in
-    let trimmedFileName: String = (fileName as NSString).lastPathComponent
+    filePath, lineNumber, error in
+    let trimmedFileName: String = (filePath as NSString).lastPathComponent
     print("Error \(trimmedFileName):\(lineNumber) \(error)")
 }
 
