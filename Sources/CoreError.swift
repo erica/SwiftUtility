@@ -110,8 +110,15 @@ public func ContextError(
 /// consists of filename, line number, error tuple
 public typealias CommonErrorHandlerType = (String, Int, ErrorType) -> Void
 
+/// Default error handler prints context and error
+public let defaultCommonErrorHandler: CommonErrorHandlerType = {
+    fileName, lineNumber, error in
+    let trimmedFileName: String = (fileName as NSString).lastPathComponent
+    print("Error \(trimmedFileName):\(lineNumber) \(error)")
+}
+
 /// Replacement for `try?` that introduces an error handler
-/// The default handler prints an error before returning nil
+/// The default error handler prints an error before returning nil
 ///
 /// - Parameter file: source file, derived from `__FILE__` context literal
 /// - Parameter line: source line, derived from `__LINE__` context literal
@@ -152,17 +159,7 @@ public func attempt<T>(
     file fileName: String = __FILE__,
     line lineNumber: Int = __LINE__,
     crashOnError: Bool = false,
-    errorHandler: CommonErrorHandlerType = {
-        // Default handler prints context:error and returns nil
-        fileName, lineNumber, error in
-        
-        /// Retrieve last path component because #fileName is
-        /// not yet a thing in Swift
-        let trimmedFileName: String = (fileName as NSString).lastPathComponent
-        
-        /// Force print and return nil like try?
-        print("Error \(trimmedFileName):\(lineNumber) \(error)")
-    },
+    errorHandler: CommonErrorHandlerType = defaultCommonErrorHandler,
     closure: () throws -> T) -> T? {
         
         do {
