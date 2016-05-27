@@ -1,28 +1,17 @@
 /*
-
-    Erica Sadun, http://ericasadun.com
-    Basic Errors
-
-*/
+ 
+ Erica Sadun, http://ericasadun.com
+ Basic Errors
+ 
+ */
 
 import Foundation
 
 /*
-
-    This code continues to use old-style context identifiers.
-    This is easily migrated.
-
-    __FILE__ -> #file String
-    __LINE__ -> #line Int
-    __COLUMN__ -> #column Int
-    __FUNCTION__ -> #function String (should be Selector?)
-
-    See: https://github.com/apple/swift-evolution/blob/master/proposals/0028-modernizing-debug-identifiers.md
-
-    Requesting #fileName to specify the last path
-    component for what is currently #file
-
-*/
+ 
+ Note: Consider introducing autoclosures?
+ 
+ */
 
 /// A basic utility error type. It stores a reason for
 /// a failed operation and the context under which the error
@@ -33,9 +22,9 @@ public struct CoreError: ErrorType {
     
     public init(
         _ reason: String,
-        _ context: String = "",
-        fileName: String = __FILE__,
-        lineNumber: Int = __LINE__
+          _ context: String = "",
+            fileName: String = #file,
+            lineNumber: Int = #line
         )
     {
         /// Establishes a context if one is not supplied by the caller
@@ -60,9 +49,9 @@ public extension Contextualizable {
     /// up the file, function, and line of the error event
     public func BuildContextError(
         items: Any...,
-        fileName: String = __FILE__,
-        function: String = __FUNCTION__,
-        line: Int = __LINE__
+        fileName: String = #file,
+        function: String = #function,
+        line: Int = #line
         ) -> CoreError
     {
         /// Caller supplies one or more instances
@@ -89,8 +78,8 @@ public extension Contextualizable {
 ///   representation will be added to the 'reasons' list.
 public func ContextError(
     items: Any...,
-    fileName: String = __FILE__,
-    lineNumber: Int = __LINE__
+    fileName: String = #file,
+    lineNumber: Int = #line
     ) -> CoreError
 {
     /// Munges supplied items into a single compound "reason"
@@ -107,7 +96,7 @@ public func ContextError(
     return CoreError(reasons, context)
 }
 
-/// consists of filename, line number, error tuple
+/// consists of file path, line number, error tuple
 public typealias CommonErrorHandlerType = (String, Int, ErrorType) -> Void
 
 /// Default error handler prints context and error
@@ -156,36 +145,36 @@ public let defaultCommonErrorHandler: CommonErrorHandlerType = {
 /// ```
 ///
 public func attempt<T>(
-    file fileName: String = __FILE__,
-    line lineNumber: Int = __LINE__,
-    crashOnError: Bool = false,
-    errorHandler: CommonErrorHandlerType = defaultCommonErrorHandler,
-    @noescape closure: () throws -> T) -> T? {
+    file fileName: String = #file,
+         line lineNumber: Int = #line,
+              crashOnError: Bool = false,
+              errorHandler: CommonErrorHandlerType = defaultCommonErrorHandler,
+              @noescape closure: () throws -> T) -> T? {
+    
+    do {
+        // Return executes only if closure succeeds, returning T
+        return try closure()
         
-        do {
-            // Return executes only if closure succeeds, returning T
-            return try closure()
-            
-        } catch {
-            // Emulate try! by crashing
-            if crashOnError {
-                print("Fatal error \(fileName):\(lineNumber): \(error)")
-                fatalError()
-            }
-            
-            // Execute error handler and return nil
-            errorHandler(fileName, lineNumber, error)
-            return nil
+    } catch {
+        // Emulate try! by crashing
+        if crashOnError {
+            print("Fatal error \(fileName):\(lineNumber): \(error)")
+            fatalError()
         }
+        
+        // Execute error handler and return nil
+        errorHandler(fileName, lineNumber, error)
+        return nil
+    }
 }
 
 /// Alternative to attempt that ignores any results and returns
 /// a Boolean value indicating success
 public func testAttempt<T>(
-    file fileName: String = __FILE__,
-    line lineNumber: Int = __LINE__,
-    crashOnError: Bool = false,
-    closure: () throws -> T
+    file fileName: String = #file,
+         line lineNumber: Int = #line,
+              crashOnError: Bool = false,
+              closure: () throws -> T
     ) -> Bool
 {
     /// Throw away result but check for non-nil. Thanks nuclearace

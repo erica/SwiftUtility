@@ -4,9 +4,9 @@ Erica Sadun, http://ericasadun.com
 
 */
 
-//--------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // MARK: Casting
-//--------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 infix operator --> {}
 
@@ -16,9 +16,9 @@ func --><T, U>(value: T, target: U.Type) -> U? {
     return unsafeBitCast(value, target)
 }
 
-//--------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // MARK: Postfix Printing
-//--------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 postfix operator *** {}
 
@@ -28,9 +28,9 @@ public postfix func *** <T>(item: T) -> T {
 }
 
 
-//--------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // MARK: Conditional Assignment
-//--------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 infix operator =? {}
 
@@ -41,9 +41,9 @@ func =?<T>(inout target: T, newValue: T?) {
 }
 
 
-//--------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // MARK: In-Place Value Assignment
-//--------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 infix operator <- {}
 
@@ -70,9 +70,9 @@ public func >>><T, U>(x: T, f: T -> U) -> U {
     return f(x)
 }
 
-//--------------------------------------------------------------
+//-----------------------------------------------------------------------------
 // MARK: Floating point equality (David Sweeris)
-//--------------------------------------------------------------
+//-----------------------------------------------------------------------------
 
 // All courtesy of David Sweeris from
 // Swift-Evolution mailing list
@@ -89,34 +89,68 @@ func == (lhs: Double, rhs: (value: Double, tolerance: Double)) -> Bool {
 // e.g. 3.0 == 3.01 ≈ 0.01 // true
 
 
-//--------------------------------------------------------------
-// MARK: Extended Initialization / Chaining
-//--------------------------------------------------------------
+//-----------------------------------------------------------------------------
+// MARK: Default class reflection
+//
+// Thanks, Mike Ash
+//-----------------------------------------------------------------------------
 
-infix operator •-> {}
-
-/// Prepare instance
-func •-> <T>(object: T, @noescape f: (inout T) -> Void) -> T {
-    var newValue = object
-    f(&newValue)
-    return newValue
+public protocol DefaultReflectable: CustomStringConvertible {}
+extension DefaultReflectable {
+    internal func DefaultDescription<T>(instance: T) -> String {
+        let mirror = Mirror(reflecting: instance)
+        let chunks = mirror.children.map({
+            (label: String?, value: Any) -> String in
+            if let label = label {
+                if value is String {
+                    return "\(label): \"\(value)\""
+                }
+                return "\(label): \(value)"
+            } else {
+                return "\(value)"
+            }
+        })
+        if chunks.count > 0 {
+            let chunksString = chunks.joinWithSeparator(", ")
+            return "\(mirror.subjectType)(\(chunksString))"
+        } else {
+            return "\(instance)"
+        }
+    }
+    
+    // Conform to CustomStringConvertible
+    public var description: String {
+        return DefaultDescription(self)
+    }
 }
+
+//-----------------------------------------------------------------------------
+// MARK: Immutable Assignment
+//
+// `let carol: Person = with(john) { $0.firstName = "Carol" }`
+//-----------------------------------------------------------------------------
 
 /*
-Usage note:
+ Note from Sean Heber: "I don’t know if it’s a huge advantage or not, but with warnings on unused results, using a with() that has a return with a class instance would mean you’d have to discard the return result explicitly or pointlessly reassign the results to your instance (thus meaning not using a let) just to avoid the warning. If you annotated the with() to allow discarding the result, then it’d be error-prone for structs. It seemed “safer” to me to have a pair."
+ 
+ func with<T>(inout this: T, @noescape using: inout T->Void) { using(&this) }
+ func with<T>(this: T, @noescape using: T->Void) { using(this) }
+ 
+ */
 
-Class:
-class MyClass {var (x, y, z) = ("x", "y", "z")}
-let myInstance = MyClass() •-> {
-    $0.x = "NewX"
-    $0.y = "NewY"
+// @discardableResult to be added
+// @noescape needs to move to type annotation
+// needs to add _ for item
+public func with<T>(item: T, @noescape update: (inout T) throws -> Void) rethrows -> T {
+    var this = item; try update(&this); return this
 }
 
-
-Struct:
-let myFoo = Foo() •-> {
-    (inout item: Foo) in
-    item.b = 23
+// @noescape needs to move to type annotation
+// needs to add _ for item
+public func modify<T>(item: T, @noescape update: (inout T) throws -> Void) rethrows {
+    var this = item; try update(&this)
 }
 
-*/
+// These are Sean's with a rename from "with" to "tweak"
+func tweak<T>(inout this: T, @noescape using: inout T->Void) { using(&this) }
+func tweak<T>(this: T, @noescape using: T->Void) { using(this) }
