@@ -1,9 +1,9 @@
 import Foundation
 
-public func timetest(block: () -> Void) {
-    let date = NSDate()
+public func timetest(_ note: String, block: () -> Void) {
+    let date = Date()
     block()
-    let timeInterval = NSDate().timeIntervalSinceDate(date)
-    print("Elapsed time: \(timeInterval)")
+    let timeInterval = Date().timeIntervalSince(date)
+    print("Test:", note); print("Elapsed time: \(timeInterval)")
 }
 

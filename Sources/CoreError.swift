@@ -16,7 +16,7 @@ import Foundation
 /// A basic utility error type. It stores a reason for
 /// a failed operation and the context under which the error
 /// has occurred
-public struct CoreError: ErrorType {
+public struct CoreError: ErrorProtocol {
     
     let (reason, context): (String, String)
     
@@ -48,7 +48,7 @@ public extension Contextualizable {
     /// Creates a context error at the point of failure, picking
     /// up the file, function, and line of the error event
     public func BuildContextError(
-        items: Any...,
+        _ items: Any...,
         fileName: String = #file,
         function: String = #function,
         line: Int = #line
@@ -57,7 +57,7 @@ public extension Contextualizable {
         /// Caller supplies one or more instances
         /// as "reasons", which need not be strings. Their default
         /// representation will be added to the 'reasons' list.
-        let reasons = items.map({ "\($0)" }).joinWithSeparator(", ")
+        let reasons = items.map({ "\($0)" }).joined(separator: ", ")
         
         /// Trimmed file name, derived from calling context
         let coreFileName = (fileName as NSString).lastPathComponent
@@ -77,14 +77,14 @@ public extension Contextualizable {
 ///   as "reasons", which need not be strings. Their default
 ///   representation will be added to the 'reasons' list.
 public func ContextError(
-    items: Any...,
+    _ items: Any...,
     fileName: String = #file,
     lineNumber: Int = #line
     ) -> CoreError
 {
     /// Munges supplied items into a single compound "reason"
     /// describing the reasons the error took place
-    let reasons = items.map({ "\($0)" }).joinWithSeparator(", ")
+    let reasons = items.map({ "\($0)" }).joined(separator: ", ")
     
     /// Trimmed file name, derived from calling context
     let coreFileName = (fileName as NSString).lastPathComponent
@@ -97,7 +97,7 @@ public func ContextError(
 }
 
 /// consists of file path, line number, error tuple
-public typealias CommonErrorHandlerType = (String, Int, ErrorType) -> Void
+public typealias CommonErrorHandlerType = (String, Int, ErrorProtocol) -> Void
 
 /// Default error handler prints context and error
 public let defaultCommonErrorHandler: CommonErrorHandlerType = {
@@ -149,7 +149,7 @@ public func attempt<T>(
          line lineNumber: Int = #line,
               crashOnError: Bool = false,
               errorHandler: CommonErrorHandlerType = defaultCommonErrorHandler,
-              @noescape closure: () throws -> T) -> T? {
+              closure: @noescape () throws -> T) -> T? {
     
     do {
         // Return executes only if closure succeeds, returning T

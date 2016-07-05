@@ -12,3 +12,7 @@ Useful stuff. BSD. Use at your own risk.
 * In-place value assignment
 * Chaining
 * Extended Initialization
+
+### Warning
+
+Currently being updated for Swift 3, and not finished yet. Many items (specifically collections) are currently broken
