@@ -17,7 +17,7 @@ Useful stuff. BSD. Use at your own risk.
 * Failable and direct chaining (ChainChainChainOfFools operator)
 
 # General Utility
-* Time testing (`timetest)
+* Time testing (`timetest`)
 * Immutable assignment (`with`)
 * Default class reflection for reference types (`DefaultReflectable`)
 * Clamping to range (`clamp(_:to:)`)
