@@ -2,17 +2,34 @@
 
 Useful stuff. BSD. Use at your own risk.
 
-* Time testing
-* Extended core errors
+# Nostalgia
+* Prefix, Postfix increment/decrement
 
 # Operators
-* Casting
 * Postfix printing
-* Conditional assignment
-* In-place value assignment
-* Chaining
-* Extended Initialization
+* Casting
+  * Force cast to the type demanded by static context (Groffcast)
+  * Unsafe bitcast constrained to equal memory footprint (Ashcast)
+  * Dynamic type dispatch (Dynogroff)
+* Assignment
+  * In-place value assignment (EridiusAssignment)
+  * Conditional in-place assignment (Ashignment)
+* Failable and direct chaining (ChainChainChainOfFools operator)
 
-### Warning
+# General Utility
+* Time testing (`timetest)
+* Immutable assignment (`with`)
+* Default class reflection for reference types (`DefaultReflectable`)
+* Clamping to range (`clamp(_:to:)`)
+ 
+# Common Core errors
+* Basic utility error
+* Contextualizing
+* ContextError
+* Common Error Handler type
+* `attempt` (replaces `try?` and `try!`) and Boolean variation `testAttempt`
 
-Currently being updated for Swift 3, and not finished yet. Many items (specifically collections) are currently broken
+### Note:
+I'm still updating SwiftCollections to Swift 3. They're removed from the repo until I get them sorted out
+
+

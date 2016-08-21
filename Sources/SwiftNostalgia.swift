@@ -5,51 +5,103 @@
  
  */
 
-/*
- 
- note: this should be expandable to any Integer type, but it cannot yet do so
- 
- test:
- var x = 5
- print(++x, x, ++x, x, x++, x, x++, x) // 6 6 7 7 7 8 8 9
+prefix operator ++
+prefix operator --
+postfix operator ++
+postfix operator --
 
- */
-
-prefix operator ++ {}
-prefix operator -- {}
 @discardableResult
-prefix public func ++(x: inout Int) -> Int { x = x + 1; return x }
+prefix public func ++(x: inout Int)    -> Int      { x = x + 1; return x }
 @discardableResult
-prefix public func ++(x: inout UInt) -> UInt { x = x + 1; return x }
+prefix public func ++(x: inout UInt)   -> UInt     { x = x + 1; return x }
 @discardableResult
-prefix public func --(x: inout Int) -> Int { x = x - 1; return x }
+prefix public func --(x: inout Int)    -> Int      { x = x - 1; return x }
 @discardableResult
-prefix public func --(x: inout UInt) -> UInt { x = x - 1; return x }
+prefix public func --(x: inout UInt)   -> UInt     { x = x - 1; return x }
 
 
-postfix operator ++ {}
-postfix operator -- {}
 @discardableResult
-postfix public func ++(x: inout Int) -> Int { defer { x = x + 1 }; return x }
+postfix public func ++(x: inout Int)   -> Int      { defer { x = x + 1 }; return x }
 @discardableResult
-postfix public func ++(x: inout UInt) -> UInt { defer { x = x + 1 }; return x }
+postfix public func ++(x: inout UInt)  -> UInt     { defer { x = x + 1 }; return x }
 @discardableResult
-postfix public func --(x: inout Int) -> Int { defer { x = x - 1 }; return x }
+postfix public func --(x: inout Int)   -> Int      { defer { x = x - 1 }; return x }
 @discardableResult
-postfix public func --(x: inout UInt) -> UInt { defer { x = x - 1 }; return x }
+postfix public func --(x: inout UInt)  -> UInt     { defer { x = x - 1 }; return x }
+
+@discardableResult
+prefix public func ++(x: inout Int16)  -> Int16    { x = x + 1; return x }
+@discardableResult
+prefix public func ++(x: inout UInt16) -> UInt16   { x = x + 1; return x }
+@discardableResult
+prefix public func --(x: inout Int16)  -> Int16    { x = x - 1; return x }
+@discardableResult
+prefix public func --(x: inout UInt16) -> UInt16   { x = x - 1; return x }
 
 
-// THIS WORKS
-prefix operator ++* {}
-prefix public func ++* <T: Integer>( x: inout T) -> T {
-    x = x + 1; return x
-}
+@discardableResult
+postfix public func ++(x: inout Int16)  -> Int16   { defer { x = x + 1 }; return x }
+@discardableResult
+postfix public func ++(x: inout UInt16) -> UInt16  { defer { x = x + 1 }; return x }
+@discardableResult
+postfix public func --(x: inout Int16)  -> Int16   { defer { x = x - 1 }; return x }
+@discardableResult
+postfix public func --(x: inout UInt16) -> UInt16  { defer { x = x - 1 }; return x }
 
-// THIS DOESN'T WORK
-/*
-prefix operator ++ {}
-prefix public func ++ <T: Integer>( x: inout T) -> T {
-    x = x + 1; return x
-}
-*/
-// BUG REPORT FILED
+@discardableResult
+prefix public func ++(x: inout Int32)   -> Int32   { x = x + 1; return x }
+@discardableResult
+prefix public func ++(x: inout UInt32)  -> UInt32  { x = x + 1; return x }
+@discardableResult
+prefix public func --(x: inout Int32)   -> Int32   { x = x - 1; return x }
+@discardableResult
+prefix public func --(x: inout UInt32)  -> UInt32  { x = x - 1; return x }
+
+
+@discardableResult
+postfix public func ++(x: inout Int32)  -> Int32   { defer { x = x + 1 }; return x }
+@discardableResult
+postfix public func ++(x: inout UInt32) -> UInt32  { defer { x = x + 1 }; return x }
+@discardableResult
+postfix public func --(x: inout Int32)  -> Int32   { defer { x = x - 1 }; return x }
+@discardableResult
+postfix public func --(x: inout UInt32) -> UInt32  { defer { x = x - 1 }; return x }
+
+@discardableResult
+prefix public func ++(x: inout Int64)   -> Int64   { x = x + 1; return x }
+@discardableResult
+prefix public func ++(x: inout UInt64)  -> UInt64  { x = x + 1; return x }
+@discardableResult
+prefix public func --(x: inout Int64)   -> Int64   { x = x - 1; return x }
+@discardableResult
+prefix public func --(x: inout UInt64)  -> UInt64  { x = x - 1; return x }
+
+
+@discardableResult
+postfix public func ++(x: inout Int64)  -> Int64   { defer { x = x + 1 }; return x }
+@discardableResult
+postfix public func ++(x: inout UInt64) -> UInt64  { defer { x = x + 1 }; return x }
+@discardableResult
+postfix public func --(x: inout Int64)  -> Int64   { defer { x = x - 1 }; return x }
+@discardableResult
+postfix public func --(x: inout UInt64) -> UInt64  { defer { x = x - 1 }; return x }
+
+@discardableResult
+prefix public func ++(x: inout Int8)    -> Int8    { x = x + 1; return x }
+@discardableResult
+prefix public func ++(x: inout UInt8)   -> UInt8   { x = x + 1; return x }
+@discardableResult
+prefix public func --(x: inout Int8)    -> Int8    { x = x - 1; return x }
+@discardableResult
+prefix public func --(x: inout UInt8)   -> UInt8   { x = x - 1; return x }
+
+
+@discardableResult
+postfix public func ++(x: inout Int8)   -> Int8    { defer { x = x + 1 }; return x }
+@discardableResult
+postfix public func ++(x: inout UInt8)  -> UInt8   { defer { x = x + 1 }; return x }
+@discardableResult
+postfix public func --(x: inout Int8)   -> Int8    { defer { x = x - 1 }; return x }
+@discardableResult
+postfix public func --(x: inout UInt8)  -> UInt8   { defer { x = x - 1 }; return x }
+

@@ -7,16 +7,10 @@
 
 import Foundation
 
-/*
- 
- Note: Consider introducing autoclosures?
- 
- */
-
 /// A basic utility error type. It stores a reason for
 /// a failed operation and the context under which the error
 /// has occurred
-public struct CoreError: ErrorProtocol {
+public struct CoreError: Error {
     
     let (reason, context): (String, String)
     
@@ -63,7 +57,7 @@ public extension Contextualizable {
         let coreFileName = (fileName as NSString).lastPathComponent
         
         /// Calling context composed of function, type, file name, line
-        let context = "\(function):\(self.dynamicType):\(coreFileName):\(line) "
+        let context = "\(function):\(type(of: self)):\(coreFileName):\(line) "
         
         // Produce and return a core error
         return CoreError(reasons, context)
@@ -97,7 +91,7 @@ public func ContextError(
 }
 
 /// consists of file path, line number, error tuple
-public typealias CommonErrorHandlerType = (String, Int, ErrorProtocol) -> Void
+public typealias CommonErrorHandlerType = (String, Int, Error) -> Void
 
 /// Default error handler prints context and error
 public let defaultCommonErrorHandler: CommonErrorHandlerType = {
@@ -149,7 +143,7 @@ public func attempt<T>(
          line lineNumber: Int = #line,
               crashOnError: Bool = false,
               errorHandler: CommonErrorHandlerType = defaultCommonErrorHandler,
-              closure: @noescape () throws -> T) -> T? {
+              closure: () throws -> T) -> T? {
     
     do {
         // Return executes only if closure succeeds, returning T
