@@ -3,6 +3,17 @@
  ericasadun.com
  Sometimes letting go doesn't mean saying goodbye
  
+ See: https://bugs.swift.org/browse/SR-1692
+ 
+ Related:
+ ```
+ public func _sequence<T>(
+     first: T, next: (T) -> T?,
+     while test: (T) -> Bool) -> UnfoldSequence<T, (T?, Bool)> 
+ {
+     return sequence(first: first, next: next).prefix(while: test)
+ }
+ ```
  */
 
 prefix operator ++
