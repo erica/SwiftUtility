@@ -54,6 +54,22 @@ public func =><T, U, V>(myself: Any, method: (T) -> (U) -> V) -> (U) -> V {
     return method(myself as! T)
 }
 
+infix operator ==>
+
+/// Dynamically cast without bridging (The Groffchoo)
+///
+/// e.g.
+/// ```
+/// var x: Any = NSString(string: "Hello")
+/// let y = x ==> NSString.self // "Hello"
+/// let z = x ==> String.self // nil
+/// ```
+///
+public func ==><T>(myself: Any, destinationType: T.Type) -> T? {
+    guard let casted = myself as? T, type(of: myself) is T.Type else { return nil }
+    return casted
+}
+
 //-----------------------------------------------------------------------------
 // MARK: In-Place Value Assignment
 //-----------------------------------------------------------------------------
