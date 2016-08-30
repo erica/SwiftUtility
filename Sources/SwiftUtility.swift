@@ -74,3 +74,14 @@ public func clamp<T: Comparable>(_ value: T, to range: ClosedRange<T>) -> T {
     return max(min(value, range.upperBound), range.lowerBound)
 }
 
+//-----------------------------------------------------------------------------
+// MARK: Flat Map 2
+//-----------------------------------------------------------------------------
+
+/// Evaluates the given closure when two `Optional` instances are not `nil`,
+/// passing the unwrapped values as parameters. (Thanks, Mike Ash)
+public func flatMap2<T, U, V>(_ first: T?, _ second: U?, _ transform: (T, U) throws -> V?) rethrows -> V? {
+    return try first.flatMap({ f in
+        try second.flatMap({ s in
+            try transform(f, s) })})
+}
