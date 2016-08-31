@@ -1,18 +1,6 @@
 import Foundation
 
 //-----------------------------------------------------------------------------
-// MARK: Pass-through Postfix Printing
-//-----------------------------------------------------------------------------
-
-postfix operator *?
-
-/// Postfix printing for quick playground tests
-/// AKA the "printica" operator
-public postfix func *?<T>(lhs: T) -> T {
-    print(lhs); return lhs
-}
-
-//-----------------------------------------------------------------------------
 // MARK: Casting
 //-----------------------------------------------------------------------------
 

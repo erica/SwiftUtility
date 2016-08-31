@@ -78,10 +78,23 @@ public func clamp<T: Comparable>(_ value: T, to range: ClosedRange<T>) -> T {
 // MARK: Flat Map 2
 //-----------------------------------------------------------------------------
 
+/// Returns a tuple of parameters if all are `.Some`, `nil` otherwise
+public func zip<T, U>(_ first: T?, _ second: U?) -> (T, U)? {
+    return first.flatMap({ firstItem in
+        second.flatMap({ secondItem in
+            return (firstItem, secondItem)
+        })
+    })
+}
+
+/// Returns a tuple-parameterized version of the passed function
+/// Via Brent R-G
+func splatted<T, U, V>(_ function: @escaping (T, U) -> V) -> ((T, U)) -> V {
+    return { tuple in function(tuple.0, tuple.1) }
+}
+
 /// Evaluates the given closure when two `Optional` instances are not `nil`,
 /// passing the unwrapped values as parameters. (Thanks, Mike Ash)
 public func flatMap2<T, U, V>(_ first: T?, _ second: U?, _ transform: (T, U) throws -> V?) rethrows -> V? {
-    return try first.flatMap({ f in
-        try second.flatMap({ s in
-            try transform(f, s) })})
+    return try zip(first, second).flatMap { try transform($0.0, $0.1) }
 }
