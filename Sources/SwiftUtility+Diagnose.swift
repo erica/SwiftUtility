@@ -1,28 +1,36 @@
-import Cocoa
 import Foundation
 
 /*
  There is no problem so big so strong so bad that it cannot be solved with a surfeit of print statements
  */
 
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------
+// Debug-only Printing
+// -----------------------------------------------------------
+
+func debugOnlyPrint(_ items: Any..., separator: String = " ", terminator: String = "\n") {
+    #if debug
+        print(items.map({ "\($0)" }).joined(separator: separator), terminator: terminator)
+    #endif
+}
+
+
+//-----------------------------------------------------------
 // MARK: Pass-through Postfix Printing
-//-----------------------------------------------------------------------------
+//-----------------------------------------------------------
 
 postfix operator *?
 
 /// Postfix printing for quick playground tests
 public postfix func *?<T>(object: T) -> T {
-    return print(object)
+    print(object); return object
 }
 
 postfix operator **?
 
-/// DEBUG-only postfix printing
+/// Debug-only postfix printing
 public postfix func **? <T>(object: T) -> T {
-    #if DEBUG
-        print(object)
-    #endif
+    debugOnlyPrint(object)
     return object
 }
 
@@ -35,17 +43,17 @@ public postfix func *?!<T>(object: T) -> T {
 
 postfix operator **?!
 
-/// DEBUG-only postfix printing
+/// Debug-only postfix printing
 public postfix func **?! <T>(object: T) -> T {
-    #if DEBUG
+    #if debug
         dump(object)
     #endif
     return object
 }
 
-//-----------------------------------------------------------------------------
+//-----------------------------------------------------------
 // MARK: Diagnostic Output
-//-----------------------------------------------------------------------------
+//-----------------------------------------------------------
 
 /// Shows the current source file and line
 /// Follow with ?* or ?*! to print/dump the item being looked at
@@ -62,43 +70,40 @@ public postfix func **?! <T>(object: T) -> T {
 ///        .jsonObject(with: data, options: []) as? NSDictionary, here("JSON"),
 ///    let resultsList = json["results"] as? NSArray, here("resultsList")
 /// ```
-func here(_ note: String = "", file: String = #file, line: Int = #line) -> Bool {
+
+func here(_ note: String = "", file: String = #file,
+          line: Int = #line, cr: Bool = false) -> Bool
+{
     let filename = (file as NSString).lastPathComponent
-    if note.isEmpty { print("[\(filename):\(line)] ") }
-    else { print("[\(filename):\(line) \(note)] ") }
+    print(
+        "[\(filename):\(line)\(note.isEmpty ? "" : " " + note)] ",
+        terminator: cr ? "\n" : "")
     return true
 }
 
-/// Diagnoses object state in compound conditions.
+/// Diagnoses state in compound conditions.
 /// Always returns true, so it does not interfere with
 /// the condition progression.
 ///
-/// - Parameter object: Will print any non-nil object
-/// - Parameter note: (optional)
 /// ```
 /// if
 ///    let json = try JSONSerialization
-///        .jsonObject(with: data, options: []) as? NSDictionary, diagnose(json),
-///    let resultsList = json["results"] as? NSArray, diagnose(resultsList),
+///        .jsonObject(with: data, options: []) as? NSDictionary,
+///    diagnose(json),
+///    let resultsList = json["results"] as? NSArray,
+///    diagnose(resultsList),
 /// ```
-func diagnose<T>(
-    _ object: T?, note: String = "",
-    file: String = #file, line: Int = #line) -> Bool
+func diagnose(_ item: Any?) -> Bool
 {
-    let filename = (file as NSString).lastPathComponent
-    print("[\(filename):\(line)] ", terminator: "")
-    
-    if !note.isEmpty { print(note) }
-    else { print ("*") }
-    
-    if let object = object { print(object) }
-    
+    if let item = item { print(item) }
+    else { print("nil") }
     return true
 }
 
-//-----------------------------------------------------------------------------
+
+//-----------------------------------------------------------
 // MARK: Diagnostic Infix Printing
-//-----------------------------------------------------------------------------
+//-----------------------------------------------------------
 
 precedencegroup VeryLowPrecedence {
     associativity: right

@@ -4,8 +4,8 @@ import Foundation
 // MARK: Time Test
 //-----------------------------------------------------------------------------
 
-// Prints the elapsed time to execute a block under whatever optimization
-// conditions are currently in use by the compiler
+/// Prints the elapsed time to execute a block under whatever optimization
+/// conditions are currently in use by the compiler
 public func timetest(_ note: String, block: () -> Void) {
     print("Starting Test:", note)
     let now = ProcessInfo().systemUptime
@@ -96,5 +96,5 @@ func splatted<T, U, V>(_ function: @escaping (T, U) -> V) -> ((T, U)) -> V {
 /// Evaluates the given closure when two `Optional` instances are not `nil`,
 /// passing the unwrapped values as parameters. (Thanks, Mike Ash)
 public func flatMap2<T, U, V>(_ first: T?, _ second: U?, _ transform: (T, U) throws -> V?) rethrows -> V? {
-    return try zip(first, second).flatMap { try transform($0.0, $0.1) }
+    return try zip(first, second).flatMap ({ try transform($0.0, $0.1) })
 }

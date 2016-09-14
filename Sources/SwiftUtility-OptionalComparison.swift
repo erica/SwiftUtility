@@ -26,33 +26,33 @@ infix operator >?: OptionalComparisonPrecedence
 infix operator >=?: OptionalComparisonPrecedence
 
 /// Returns lhs! < rhs!, otherwise nil
-public func<? <T: Comparable>(lhs: T?, rhs: T?) -> Bool? { return _flatMap2(lhs, rhs, <) }
+public func <? <T: Comparable>(lhs: T?, rhs: T?) -> Bool? { return _flatMap2(lhs, rhs, <) }
 
 /// Returns lhs! <= rhs!, otherwise nil
-public func<=? <T: Comparable>(lhs: T?, rhs: T?) -> Bool? { return _flatMap2(lhs, rhs, <=) }
+public func <=? <T: Comparable>(lhs: T?, rhs: T?) -> Bool? { return _flatMap2(lhs, rhs, <=) }
 
 /// Returns lhs! == rhs!, otherwise nil
-public func==? <T: Comparable>(lhs: T?, rhs: T?) -> Bool? { return _flatMap2(lhs, rhs, ==) }
+public func ==? <T: Comparable>(lhs: T?, rhs: T?) -> Bool? { return _flatMap2(lhs, rhs, ==) }
 
 /// Returns lhs! > rhs!, otherwise nil
-public func>? <T: Comparable>(lhs: T?, rhs: T?) -> Bool? { return _flatMap2(lhs, rhs, >) }
+public func >? <T: Comparable>(lhs: T?, rhs: T?) -> Bool? { return _flatMap2(lhs, rhs, >) }
 
 /// Returns lhs! >= rhs!, otherwise nil
-public func>=? <T: Comparable>(lhs: T?, rhs: T?) -> Bool? { return _flatMap2(lhs, rhs, >=) }
+public func >=? <T: Comparable>(lhs: T?, rhs: T?) -> Bool? { return _flatMap2(lhs, rhs, >=) }
 
 // MARK: Unwrapped Optional Comparisons
 
 /// Returns lhs! < rhs!, otherwise false
-public func< <T: Comparable>(lhs: T?, rhs: T?) -> Bool { return lhs <? rhs ?? false }
+public func < <T: Comparable>(lhs: T?, rhs: T?) -> Bool { return lhs <? rhs ?? false }
 
 /// Returns lhs! <= rhs!, otherwise false
-public func<= <T: Comparable>(lhs: T?, rhs: T?) -> Bool { return lhs <=? rhs ?? false }
+public func <= <T: Comparable>(lhs: T?, rhs: T?) -> Bool { return lhs <=? rhs ?? false }
 
 /// Returns lhs! == rhs!, otherwise false
-public func== <T: Comparable>(lhs: T?, rhs: T?) -> Bool { return lhs ==? rhs ?? false }
+public func == <T: Comparable>(lhs: T?, rhs: T?) -> Bool { return lhs ==? rhs ?? false }
 
 /// Returns lhs! > rhs!, otherwise false
-public func> <T: Comparable>(lhs: T?, rhs: T?) -> Bool { return lhs >? rhs ?? false }
+public func > <T: Comparable>(lhs: T?, rhs: T?) -> Bool { return lhs >? rhs ?? false }
 
 /// Returns lhs! >= rhs!, otherwise false
-public func>= <T: Comparable>(lhs: T?, rhs: T?) -> Bool { return lhs >=? rhs ?? false }
+public func >= <T: Comparable>(lhs: T?, rhs: T?) -> Bool { return lhs >=? rhs ?? false }
