@@ -29,7 +29,7 @@
 // MARK: Utility
 
 /// Evaluates the given closure when two `Optional` instances are not `nil`,
-/// passing the unwrapped values as parameters. ()
+/// passing the unwrapped values as parameters.
 fileprivate func _flatMap2<T, U, V>(
     _ first: T?, _ second: U?,
     _ transform: (T, U) throws -> V?) rethrows -> V?
