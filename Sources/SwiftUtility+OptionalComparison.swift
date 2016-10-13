@@ -34,9 +34,8 @@ fileprivate func _flatMap2<T, U, V>(
     _ first: T?, _ second: U?,
     _ transform: (T, U) throws -> V?) rethrows -> V?
 {
-    return try first.flatMap({ first in
-        try second.flatMap({ second in
-            try transform(first, second) })})
+    guard let first = first, let second = second else { return nil }
+    return try transform(first, second)
 }
 
 // MARK: Wrapped Optional Comparisons
