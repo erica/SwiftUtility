@@ -93,32 +93,32 @@ public func >= <T: Comparable>(lhs: T?, rhs: T?) -> Bool { return lhs >=? rhs ??
 
 // MARK: Unwrapped Optional-Nonoptional Comparisons
 
-/// Returns lhs! < rhs!, otherwise false
+/// Returns lhs < rhs!, otherwise false
 public func < <T: Comparable>(lhs: T, rhs: T?) -> Bool { return lhs <? rhs ?? false }
 
-/// Returns lhs! <= rhs!, otherwise false
+/// Returns lhs <= rhs!, otherwise false
 public func <= <T: Comparable>(lhs: T, rhs: T?) -> Bool { return lhs <=? rhs ?? false }
 
-/// Returns lhs! == rhs!, otherwise false
+/// Returns lhs == rhs!, otherwise false
 public func == <T: Comparable>(lhs: T, rhs: T?) -> Bool { return lhs ==? rhs ?? false }
 
-/// Returns lhs! > rhs!, otherwise false
+/// Returns lhs > rhs!, otherwise false
 public func > <T: Comparable>(lhs: T, rhs: T?) -> Bool { return lhs >? rhs ?? false }
 
-/// Returns lhs! >= rhs!, otherwise false
+/// Returns lhs >= rhs!, otherwise false
 public func >= <T: Comparable>(lhs: T, rhs: T?) -> Bool { return lhs >=? rhs ?? false }
 
-/// Returns lhs! < rhs!, otherwise false
+/// Returns lhs! < rhs, otherwise false
 public func < <T: Comparable>(lhs: T?, rhs: T) -> Bool { return lhs <? rhs ?? false }
 
-/// Returns lhs! <= rhs!, otherwise false
+/// Returns lhs! <= rhs, otherwise false
 public func <= <T: Comparable>(lhs: T?, rhs: T) -> Bool { return lhs <=? rhs ?? false }
 
-/// Returns lhs! == rhs!, otherwise false
+/// Returns lhs! == rhs, otherwise false
 public func == <T: Comparable>(lhs: T?, rhs: T) -> Bool { return lhs ==? rhs ?? false }
 
-/// Returns lhs! > rhs!, otherwise false
+/// Returns lhs! > rhs, otherwise false
 public func > <T: Comparable>(lhs: T?, rhs: T) -> Bool { return lhs >? rhs ?? false }
 
-/// Returns lhs! >= rhs!, otherwise false
+/// Returns lhs! >= rhs, otherwise false
 public func >= <T: Comparable>(lhs: T?, rhs: T) -> Bool { return lhs >=? rhs ?? false }
