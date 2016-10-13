@@ -161,7 +161,7 @@ public func > <T: Comparable>(lhs: T?, rhs: T) -> Bool { return lhs >? rhs ?? fa
 /// Returns lhs! >= rhs, otherwise false
 public func >= <T: Comparable>(lhs: T?, rhs: T) -> Bool { return lhs >=? rhs ?? false }
 
-// These operators compare a non-optional truth value q and
+// These operators compare a non-optional truth value p and
 // an optional truth value q?, returning `p op q` for non-nil
 // q?, otherwise false
 
