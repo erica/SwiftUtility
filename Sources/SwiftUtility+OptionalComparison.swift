@@ -16,9 +16,9 @@
 // * Compare p and q?, and return p op q!, otherwise false
 // * Compare p? and q, and return p! op q, otherwise false
 //
-// These implementations follow the precedent of IEEE754 wrt NAN:
-// Any comparison involving .none is invalid, producing nil (wrapped result) 
-// or false (truth value result)
+// These implementations follow the precedent of IEEE754 wrt NaN:
+// Any comparison involving .none is invalid, producing nil 
+// (wrapped result) or false (truth value result)
 //
 // See also: http://stackoverflow.com/questions/1565164/what-is-the-rationale-for-all-comparisons-returning-false-for-ieee754-nan-values
 //
