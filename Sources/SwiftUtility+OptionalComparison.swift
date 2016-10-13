@@ -45,34 +45,34 @@ public func >=? <T: Comparable>(lhs: T?, rhs: T?) -> Bool? { return _flatMap2(lh
 // MARK: Wrapped Optional-Nonoptional Comparison
 
 /// Returns lhs! < rhs, otherwise nil
-public func <? <T: Comparable>(lhs: T?, rhs: T) -> Bool? { return lhs.map{ $0 < rhs} }
+public func <? <T: Comparable>(lhs: T?, rhs: T) -> Bool? { return lhs.map{ $0 < rhs } }
 
 /// Returns lhs! <= rhs, otherwise nil
-public func <=? <T: Comparable>(lhs: T?, rhs: T) -> Bool? { return lhs.map{ $0 <= rhs} }
+public func <=? <T: Comparable>(lhs: T?, rhs: T) -> Bool? { return lhs.map{ $0 <= rhs } }
 
 /// Returns lhs! == rhs, otherwise nil
-public func ==? <T: Comparable>(lhs: T?, rhs: T) -> Bool? { return lhs.map{ $0 == rhs} }
+public func ==? <T: Comparable>(lhs: T?, rhs: T) -> Bool? { return lhs.map{ $0 == rhs } }
 
 /// Returns lhs! > rhs, otherwise nil
-public func >? <T: Comparable>(lhs: T?, rhs: T) -> Bool? { return lhs.map{ $0 > rhs} }
+public func >? <T: Comparable>(lhs: T?, rhs: T) -> Bool? { return lhs.map{ $0 > rhs } }
 
 /// Returns lhs! >= rhs, otherwise nil
-public func >=? <T: Comparable>(lhs: T?, rhs: T) -> Bool? { return lhs.map{ $0 >= rhs} }
+public func >=? <T: Comparable>(lhs: T?, rhs: T) -> Bool? { return lhs.map{ $0 >= rhs } }
 
 /// Returns lhs < rhs!, otherwise nil
-public func <? <T: Comparable>(lhs: T, rhs: T?) -> Bool? { return rhs.map{ lhs < $0} }
+public func <? <T: Comparable>(lhs: T, rhs: T?) -> Bool? { return rhs.map{ lhs < $0 } }
 
 /// Returns lhs <= rhs!, otherwise nil
-public func <=? <T: Comparable>(lhs: T, rhs: T?) -> Bool? { return rhs.map{ lhs <= $0} }
+public func <=? <T: Comparable>(lhs: T, rhs: T?) -> Bool? { return rhs.map{ lhs <= $0 } }
 
 /// Returns lhs == rhs!, otherwise nil
-public func ==? <T: Comparable>(lhs: T, rhs: T?) -> Bool? { return rhs.map{ lhs == $0} }
+public func ==? <T: Comparable>(lhs: T, rhs: T?) -> Bool? { return rhs.map{ lhs == $0 } }
 
 /// Returns lhs > rhs!, otherwise nil
-public func >? <T: Comparable>(lhs: T, rhs: T?) -> Bool? { return rhs.map{ lhs > $0} }
+public func >? <T: Comparable>(lhs: T, rhs: T?) -> Bool? { return rhs.map{ lhs > $0 } }
 
 /// Returns lhs >= rhs!, otherwise nil
-public func >=? <T: Comparable>(lhs: T, rhs: T?) -> Bool? { return rhs.map{ lhs >= $0} }
+public func >=? <T: Comparable>(lhs: T, rhs: T?) -> Bool? { return rhs.map{ lhs >= $0 } }
 
 // MARK: Unwrapped Optional Comparisons
 
