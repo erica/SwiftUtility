@@ -242,3 +242,46 @@ public func >>><T, U>(value: T?, transform: (T) -> U?) -> U? {
 public func >>><T, U>(value: T, transform: (T) -> U) -> U {
     return transform(value)
 }
+
+
+// --------------------------------------------------
+// MARK: - EXPONENTIATION
+// --------------------------------------------------
+
+/// Exponentiation operator
+infix operator **
+
+extension IntegerArithmetic {
+    /// Returns base ^^ exp
+    /// - parameter base: the base value
+    /// - parameter exp: the exponentiation value
+    static func **(base: Self, exp: Int) -> Self {
+        return repeatElement(base, count: exp).reduce(1 as! Self, *)
+    }
+}
+
+extension FloatingPoint {
+    /// Returns base ^^ exp
+    /// - parameter base: the base value
+    /// - parameter exp: the exponentiation value
+    static func **(base: Self, exp: Int) -> Self {
+        return repeatElement(base, count: exp).reduce(1, *)
+    }
+}
+
+extension Double {
+    /// Returns base ^^ exp
+    /// - parameter base: the base value
+    /// - parameter exp: the exponentiation value
+    static func **(base: Double, exp: Double) -> Double {
+        return pow(base, exp)
+    }
+    
+    /// Returns base ^^ exp
+    /// - parameter base: the base value
+    /// - parameter exp: the exponentiation value
+    static func **(base: Int, exp: Double) -> Double {
+        return pow(Double(base), exp)
+    }
+}
+
