@@ -101,7 +101,7 @@ public func >? <T: Comparable>(lhs: T?, rhs: T) -> Bool? { return lhs.map({ $0 >
 /// Returns lhs! >= rhs, otherwise nil
 public func >=? <T: Comparable>(lhs: T?, rhs: T) -> Bool? { return lhs.map({ $0 >= rhs }) }
 
-// These operators compare a non-optional truth value q and
+// These operators compare a non-optional truth value p and
 // an optional truth value q?, returning `p op q` for non-nil
 // q?, otherwise nil
 
@@ -179,4 +179,3 @@ public func > <T: Comparable>(lhs: T, rhs: T?) -> Bool { return lhs >? rhs ?? fa
 
 /// Returns lhs >= rhs!, otherwise false
 public func >= <T: Comparable>(lhs: T, rhs: T?) -> Bool { return lhs >=? rhs ?? false }
-
