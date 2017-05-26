@@ -105,11 +105,6 @@ func diagnose(_ item: Any?) -> Bool
 // MARK: Diagnostic Infix Printing
 //-----------------------------------------------------------
 
-precedencegroup VeryLowPrecedence {
-    associativity: right
-    lowerThan: AssignmentPrecedence
-}
-
 /// An operator alternative to diagnose, which can be a pain to type.
 /// These use a low precedence infix operator to allow the entire
 /// condition to be evaluated and printed before assignment.
